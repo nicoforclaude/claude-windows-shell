@@ -1,0 +1,14 @@
+{
+  "name": "claude-windows-shell",
+  "owner": {
+    "name": "NicoForClaude"
+  },
+  "description": "Windows shell utilities and PowerShell integration for Claude Code - avoid bash errors with proper path handling, nul redirection, and Windows-specific command patterns",
+  "plugins": [
+    {
+      "name": "windows-shell",
+      "source": "./plugins/windows-shell",
+      "description": "Windows filesystem navigation, PowerShell commands, and path handling utilities to prevent shell errors in Claude Code on Windows"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "windows-shell",
+  "description": "Windows filesystem navigation, PowerShell commands, and path handling utilities to prevent shell errors in Claude Code on Windows",
+  "version": "1.0.0",
+  "author": {
+    "name": "NicoForClaude"
+  },
+  "keywords": [
+    "windows",
+    "powershell",
+    "filesystem",
+    "paths",
+    "shell",
+    "compatibility"
+  ],
+  "category": "platform-tools"
+}
