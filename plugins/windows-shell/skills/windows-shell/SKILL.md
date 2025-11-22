@@ -127,7 +127,7 @@ command | Out-Null
 ### 5. PowerShell Special Character Escaping
 
 **Problem A - Negation Operator:**
-When passing PowerShell commands via Bash, the `!` character gets escaped to `\!`.
+When passing PowerShell commands via Bash, the exclamation mark character gets escaped to backslash-exclamation.
 
 ```bash
 # Fails - ! becomes \!
@@ -135,7 +135,7 @@ powershell -Command "if (!(Test-Path 'file.txt')) { Write-Output 'missing' }"
 # Error: \! is not recognized
 ```
 
-**Solution:** Use `-not` instead of `!` for negation.
+**Solution:** Use `-not` instead of exclamation mark for negation.
 
 ```bash
 # Works
@@ -162,7 +162,7 @@ powershell -Command "Get-Item 'file.pdf' | Select-Object Length"
 ```
 
 **Summary for inline PowerShell:**
-- Use `-not` instead of `!`
+- Use `-not` instead of exclamation mark
 - Use script files for complex logic with variables
 - Keep inline commands simple (single operation, pipe output)
 
@@ -241,7 +241,7 @@ Before running Windows filesystem commands:
 - [ ] Multiple independent operations use parallel tool calls
 - [ ] Skills use forward slashes: `scripts/helper.py`
 - [ ] PowerShell used for Windows-specific tasks, Bash for Unix-style operations
-- [ ] Using `-not` instead of `!` for PowerShell negation
+- [ ] Using `-not` instead of exclamation mark for PowerShell negation
 - [ ] Complex PowerShell logic in `.ps1` files, not inline commands
 
 ## Examples from Real Errors
@@ -251,7 +251,7 @@ Before running Windows filesystem commands:
 2. PowerShell pipe after `cd` → The term 'C:\...' is not recognized
 3. Unquoted path → cd: C:KolyaRepositories... (backslashes stripped)
 4. Using `/dev/null` → No such file or directory
-5. Using `!` in PowerShell via Bash → `\!` is not recognized
+5. Using exclamation mark in PowerShell via Bash → backslash-exclamation is not recognized
 6. Inline `$variable` in PowerShell → variables are empty/stripped
 
 **Resolution:**
@@ -259,5 +259,5 @@ All resolved by following the patterns in this skill:
 - Quote paths: `cd "C:\KolyaRepositories\repo"`
 - Avoid pipes after cd: `git status --short` (no `| findstr`)
 - Use `nul` not `/dev/null`: `command >nul 2>&1`
-- Use `-not` instead of `!` for negation
+- Use `-not` instead of exclamation mark for negation
 - Use `.ps1` script files for complex PowerShell logic
