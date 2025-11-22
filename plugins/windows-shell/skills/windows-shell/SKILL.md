@@ -124,6 +124,48 @@ command >nul 2>&1
 command | Out-Null
 ```
 
+### 5. PowerShell Special Character Escaping
+
+**Problem A - Negation Operator:**
+When passing PowerShell commands via Bash, the `!` character gets escaped to `\!`.
+
+```bash
+# Fails - ! becomes \!
+powershell -Command "if (!(Test-Path 'file.txt')) { Write-Output 'missing' }"
+# Error: \! is not recognized
+```
+
+**Solution:** Use `-not` instead of `!` for negation.
+
+```bash
+# Works
+powershell -Command "if (-not (Test-Path 'file.txt')) { Write-Output 'missing' }"
+```
+
+**Problem B - Variable Interpolation:**
+PowerShell `$variable` syntax gets stripped when passed through Bash.
+
+```bash
+# Fails - $pdf and $sizeKB are empty
+powershell -Command "$pdf = Get-Item 'file.pdf'; $sizeKB = [math]::Round($pdf.Length / 1KB, 1); Write-Output $sizeKB"
+# Output: (empty or partial)
+```
+
+**Solution:** Use `.ps1` script files for complex operations, or pipe output between simple commands.
+
+```bash
+# Works - use script file
+powershell -ExecutionPolicy Bypass -File "script.ps1" -Path "file.pdf"
+
+# Works - simple piped commands
+powershell -Command "Get-Item 'file.pdf' | Select-Object Length"
+```
+
+**Summary for inline PowerShell:**
+- Use `-not` instead of `!`
+- Use script files for complex logic with variables
+- Keep inline commands simple (single operation, pipe output)
+
 ## Best Practices for Multi-Repo Operations
 
 When iterating over multiple repositories (e.g., for status checks):
@@ -199,6 +241,8 @@ Before running Windows filesystem commands:
 - [ ] Multiple independent operations use parallel tool calls
 - [ ] Skills use forward slashes: `scripts/helper.py`
 - [ ] PowerShell used for Windows-specific tasks, Bash for Unix-style operations
+- [ ] Using `-not` instead of `!` for PowerShell negation
+- [ ] Complex PowerShell logic in `.ps1` files, not inline commands
 
 ## Examples from Real Errors
 
@@ -207,9 +251,13 @@ Before running Windows filesystem commands:
 2. PowerShell pipe after `cd` → The term 'C:\...' is not recognized
 3. Unquoted path → cd: C:KolyaRepositories... (backslashes stripped)
 4. Using `/dev/null` → No such file or directory
+5. Using `!` in PowerShell via Bash → `\!` is not recognized
+6. Inline `$variable` in PowerShell → variables are empty/stripped
 
 **Resolution:**
 All resolved by following the patterns in this skill:
 - Quote paths: `cd "C:\KolyaRepositories\repo"`
 - Avoid pipes after cd: `git status --short` (no `| findstr`)
 - Use `nul` not `/dev/null`: `command >nul 2>&1`
+- Use `-not` instead of `!` for negation
+- Use `.ps1` script files for complex PowerShell logic
