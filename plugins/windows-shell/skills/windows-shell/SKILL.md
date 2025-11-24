@@ -107,20 +107,22 @@ cd "C:\KolyaRepositories\calc"
 
 ### 4. Output Redirection to Null Device
 
-**Problem:** Using Unix-style `/dev/null` on Windows.
+**Context:** Claude Code uses Git Bash on Windows, which provides Unix-like paths.
 
+**In Git Bash (Claude Code default):**
 ```bash
-# Fails on Windows
+# CORRECT - Git Bash provides /dev/null
 command > /dev/null 2>&1
+
+# WRONG - creates a literal file named "nul" in working directory!
+command >nul 2>&1
 ```
 
-**Solution:** Use Windows `nul` device.
+**WARNING:** Using `>nul` in Git Bash creates a file that pollutes `git status`. Always use `/dev/null` in Git Bash.
 
-```bash
-# Works on Windows
-command >nul 2>&1
-
-# Or in PowerShell
+**In PowerShell:**
+```powershell
+command 2>$null
 command | Out-Null
 ```
 
@@ -235,7 +237,7 @@ Reserve Bash for actual terminal operations: git, npm, docker, build commands, e
 Before running Windows filesystem commands:
 
 - [ ] Paths with backslashes are quoted: `"C:\Path\To\Dir"`
-- [ ] Using `nul` instead of `/dev/null` for output redirection
+- [ ] Using `/dev/null` for output redirection in Git Bash (NOT `>nul` which creates a file)
 - [ ] No unnecessary pipes after `cd` (especially `findstr`, `Where-Object`)
 - [ ] Using specialized tools (Read, Glob, Grep) instead of bash for file ops
 - [ ] Multiple independent operations use parallel tool calls
@@ -250,7 +252,7 @@ Before running Windows filesystem commands:
 1. `findstr` after `cd` → FINDSTR: Cannot open [dirname]
 2. PowerShell pipe after `cd` → The term 'C:\...' is not recognized
 3. Unquoted path → cd: C:KolyaRepositories... (backslashes stripped)
-4. Using `/dev/null` → No such file or directory
+4. Using `>nul` in Git Bash → creates a literal file named "nul" polluting git status
 5. Using exclamation mark in PowerShell via Bash → backslash-exclamation is not recognized
 6. Inline `$variable` in PowerShell → variables are empty/stripped
 
@@ -258,6 +260,6 @@ Before running Windows filesystem commands:
 All resolved by following the patterns in this skill:
 - Quote paths: `cd "C:\KolyaRepositories\repo"`
 - Avoid pipes after cd: `git status --short` (no `| findstr`)
-- Use `nul` not `/dev/null`: `command >nul 2>&1`
+- Use `/dev/null` in Git Bash: `command > /dev/null 2>&1` (NOT `>nul`)
 - Use `-not` instead of exclamation mark for negation
 - Use `.ps1` script files for complex PowerShell logic
