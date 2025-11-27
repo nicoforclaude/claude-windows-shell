@@ -6,16 +6,6 @@ Windows shell utilities and PowerShell integration for Claude Code - eliminate b
 
 This marketplace provides the `windows-shell` plugin that helps Claude Code work seamlessly on Windows by handling common pitfalls with paths, shell commands, and cross-platform compatibility.
 
-## Problem Solved
-
-When running Claude Code on Windows, you may encounter errors like:
-- `FINDSTR: Cannot open [dirname]` - Piping issues after directory changes
-- `cd: C:KolyaRepositories... No such file or directory` - Unquoted backslash paths
-- `The term 'C:\...' is not recognized` - PowerShell context loss
-- `/dev/null: No such file or directory` - Unix-style device names
-
-The `windows-shell` skill proactively prevents these errors by teaching Claude the correct Windows command patterns.
-
 ## Installation
 
 ### 1. Add the Marketplace
@@ -43,6 +33,16 @@ Or for local testing:
 ```
 
 You should see `windows-shell` in your installed plugins list.
+
+## Problem Solved
+
+When running Claude Code on Windows, you may encounter errors like:
+- `FINDSTR: Cannot open [dirname]` - Piping issues after directory changes
+- `cd: C:KolyaRepositories... No such file or directory` - Unquoted backslash paths
+- `The term 'C:\...' is not recognized` - PowerShell context loss
+- `/dev/null: No such file or directory` - Unix-style device names
+
+The `windows-shell` skill proactively prevents these errors by teaching Claude the correct Windows command patterns.
 
 ## Features
 
